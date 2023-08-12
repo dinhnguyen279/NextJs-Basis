@@ -1,35 +1,22 @@
-"use client";
+import Link from "next/link";
 import React from "react";
-import FormTable from "@/components/app.table";
-import useSWR from "swr";
+import type { Metadata } from "next";
 
+export const metadata: Metadata = {
+  title: "Home page",
+  description: "This is my project NextJS v13",
+};
 export default function Home() {
-  const fetcher = (url: string) => fetch(url).then((res) => res.json());
-
-  const { data, error, isLoading } = useSWR(
-    "http://localhost:8000/blogs",
-    fetcher,
-    {
-      revalidateIfStale: false,
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-    }
-  );
-
-  if (!data) {
-    return <div>No data...</div>;
-  }
-
   return (
     <main className="flex flex-col items-center justify-between py-24">
       <div className="py-10 text-center font-mono text-sm">
         <h1>NextJS V13</h1>
+        <p className="py-4 text-lg">
+          Hiện tại chúng tôi chưa cập nhật giao diện bạn vào đây xem đỡ nhé^^
+          <br />
+          <Link href={"/blogs"}>Blogs!</Link>
+        </p>
       </div>
-      {!data ? (
-        <div className="py-10 text-center font-mono text-base">No data...</div>
-      ) : (
-        <FormTable blogs={data?.sort((a: any, b: any) => b.id - a.id)} />
-      )}
     </main>
   );
 }

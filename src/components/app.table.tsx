@@ -2,7 +2,8 @@
 import React, { useState } from "react";
 import { Button } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
-import ModalCreate from "./create.modal";
+import ModalCRUD from "./crud.modal";
+import Link from "next/link";
 
 interface IProps {
   blogs: IBlogs[];
@@ -10,7 +11,9 @@ interface IProps {
 
 const FormTable = (props: IProps) => {
   const { blogs } = props;
-  const [showModalCreate, setShowModalCreate] = useState<boolean>(false);
+  const [showModalCRUD, setShowModalCRUD] = useState<boolean>(false);
+  const [titleModal, setTitleModal] = useState<string>("");
+  const [blog, setBlog] = useState<IBlogs | null>(null);
   return (
     <>
       <div className="flex justify-between w-full items-center mb-3">
@@ -18,7 +21,8 @@ const FormTable = (props: IProps) => {
         <div>
           <Button
             onClick={() => {
-              setShowModalCreate(true);
+              setShowModalCRUD(true);
+              setTitleModal("Create");
             }}
             variant="secondary"
           >
@@ -42,14 +46,32 @@ const FormTable = (props: IProps) => {
                 <td>{val.id}</td>
                 <td>{val.title}</td>
                 <td>{val.author}</td>
-                <td className="flex gap-x-4">
+                <td className="flex sm:flex-row flex-col gap-4 h-full">
                   <Button className="basis-1/3" variant="primary">
-                    View
+                    <Link href={`/blogs/${val.id}`} className="nav-link">
+                      View
+                    </Link>
                   </Button>
-                  <Button className="basis-1/3" variant="success">
+                  <Button
+                    onClick={() => {
+                      setBlog(val);
+                      setShowModalCRUD(true);
+                      setTitleModal("Update");
+                    }}
+                    className="basis-1/3"
+                    variant="warning"
+                  >
                     Edit
                   </Button>
-                  <Button className="basis-1/3" variant="danger">
+                  <Button
+                    onClick={() => {
+                      setBlog(val);
+                      setShowModalCRUD(true);
+                      setTitleModal("Delete");
+                    }}
+                    className="basis-1/3"
+                    variant="danger"
+                  >
                     Delete
                   </Button>
                 </td>
@@ -58,9 +80,12 @@ const FormTable = (props: IProps) => {
           })}
         </tbody>
       </Table>
-      <ModalCreate
-        setShowModalCreate={setShowModalCreate}
-        showModalCreate={showModalCreate}
+      <ModalCRUD
+        titleModal={titleModal}
+        blog={blog}
+        setBlog={setBlog}
+        setShowModalCRUD={setShowModalCRUD}
+        showModalCRUD={showModalCRUD}
       />
     </>
   );
