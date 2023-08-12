@@ -1,39 +1,67 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
+import { Button } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
-const FormTable = () => {
+import ModalCreate from "./create.modal";
+
+interface IProps {
+  blogs: IBlogs[];
+}
+
+const FormTable = (props: IProps) => {
+  const { blogs } = props;
+  const [showModalCreate, setShowModalCreate] = useState<boolean>(false);
   return (
     <>
-      <Table hover bordered>
+      <div className="flex justify-between w-full items-center mb-3">
+        <h1>Blogs Daniel</h1>
+        <div>
+          <Button
+            onClick={() => {
+              setShowModalCreate(true);
+            }}
+            variant="secondary"
+          >
+            Add New
+          </Button>
+        </div>
+      </div>
+      <Table hover bordered size="md">
         <thead>
           <tr>
-            <th>#</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Username</th>
+            <th>STT</th>
+            <th>Title</th>
+            <th>Author</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>1</td>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@twitter</td>
-          </tr>
+          {blogs?.map((val) => {
+            return (
+              <tr key={val.id}>
+                <td>{val.id}</td>
+                <td>{val.title}</td>
+                <td>{val.author}</td>
+                <td className="flex gap-x-4">
+                  <Button className="basis-1/3" variant="primary">
+                    View
+                  </Button>
+                  <Button className="basis-1/3" variant="success">
+                    Edit
+                  </Button>
+                  <Button className="basis-1/3" variant="danger">
+                    Delete
+                  </Button>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </Table>
+      <ModalCreate
+        setShowModalCreate={setShowModalCreate}
+        showModalCreate={showModalCreate}
+      />
     </>
   );
 };

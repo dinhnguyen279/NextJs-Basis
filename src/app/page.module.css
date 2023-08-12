@@ -1,0 +1,11 @@
+.item-list a {
+  color: gray;
+}
+
+.item-list:hover {
+  background: gray;
+}
+
+.item-list:hover a {
+  color: whitesmoke;
+}
